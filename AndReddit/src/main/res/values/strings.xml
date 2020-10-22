@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">AndReddit</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Andreddit</string>
+    <string name="nav_header_subtitle">Simple reddit client</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_catch_up">Catch up</string>
+
+    <string name="menu_home">Subreddits</string>
+    <string name="menu_gallery">Subscribed</string>
+    <string name="menu_slideshow">About</string>
+    <string name="login_lext">Click the login button to log in your Reddit account\nYou will be redirected to the Reddit website to enter your username and password and then you will be able to use this great app!\n\nP.S. This app is the capstone project for the Udacity Android Developer Nanodegree (by Google).</string>
+    <string name="login_button">Login</string>
+    <string name="login_button2">login2</string>
+    <string name="text_about">
+
+        <br/>Andreddit is an app that allows a user to indicate a set of subreddits that he would like to follow and store.
+        <br/>
+        <br/>This is my Capstone project for the Udacity Android Developer Nanodegree (by Google).
+        <br/>
+        <br/>StavrosD (or sdim )</string>
+    <string name="about">TextView</string>
+    <string name="subscribed_reddits">Subscribed reddits</string>
+    <string name="home_button">Button</string>
+    <string name="andreddit">AndReddit</string>
+</resources>

@@ -1,0 +1,2 @@
+include ':AndReddit'
+rootProject.name = "AndReddit"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reddit colors
+   https://www.redditinc.com/assets/press-resources/reddit_brand_guidelines_20180314.pdf -->
+    <color name="reddit_oranged">#ff4500</color>
+    <color name="reddit_yellow">#ffca00</color>
+    <color name="reddit_mango">#ffb000</color>
+    <color name="reddit_orange">#ff8717</color>
+    <color name="reddit_mint">#00ddbb</color>
+    <color name="reddit_teal">#00a6ab</color>
+    <color name="reddit_blue">#24a0ed</color>
+    <color name="reddit_alien">#0079d3</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

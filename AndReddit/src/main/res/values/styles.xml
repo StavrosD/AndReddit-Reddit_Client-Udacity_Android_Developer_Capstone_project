@@ -1,0 +1,26 @@
+<resources>
+
+    <style name="Theme.Bacon" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+<item name="fontFamily"></item>
+        <item name="colorPrimary">@color/reddit_blue</item>
+        <item name="colorPrimaryVariant">@color/reddit_alien</item>
+        <item name="colorSecondary">@color/reddit_oranged</item>
+        <item name="colorSecondaryVariant">@color/reddit_orange</item>
+        <item name="android:statusBarColor">@color/reddit_teal</item>
+        <item name="android:colorBackground">@color/reddit_yellow</item>
+        <item name="android:fontFamily">@font/roboto</item>
+
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_image_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/shared_image_transition</item>
+        <item name="android:windowEnterTransition">@transition/recyclerview_exit_transition</item>
+        <item name="android:windowExitTransition">@transition/recyclerview_exit_transition</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    </style>
+
+    <style name="Theme.Bacon.Detail">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+</resources>
