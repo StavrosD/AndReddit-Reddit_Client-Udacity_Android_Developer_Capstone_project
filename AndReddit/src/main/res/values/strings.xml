@@ -3,11 +3,12 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Andreddit</string>
-    <string name="nav_header_subtitle">Simple reddit client</string>
+    <string name="nav_header_title">AndReddit</string>
+    <string name="nav_header_subtitle">Simple Reddit client</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="action_add_favorite">Add favorite</string>
+    <string name="action_share">Share</string>
     <string name="action_catch_up">Catch up</string>
-
     <string name="menu_home">Subreddits</string>
     <string name="menu_gallery">Subscribed</string>
     <string name="menu_slideshow">About</string>
@@ -15,14 +16,33 @@
     <string name="login_button">Login</string>
     <string name="login_button2">login2</string>
     <string name="text_about">
-
-        <br/>Andreddit is an app that allows a user to indicate a set of subreddits that he would like to follow and store.
-        <br/>
-        <br/>This is my Capstone project for the Udacity Android Developer Nanodegree (by Google).
-        <br/>
-        <br/>StavrosD (or sdim )</string>
+        <br />Andreddit is an app that allows a user to indicate a set of subreddits that he would like to follow and store.
+        <br />
+        <br />Each time you run the application, a list of your subscribed subreddits is downloaded, you may see this list on the "Subscribed" drawer tab.
+        <br />
+        <br />On the main screen, one subreddit will be displayed. Each time you click the cicrle with the "Next" icon on the bottom right side of the screen, another subreddit from the next subscribed reddit will be displayed.
+        <br />
+        <br />Each time, the next child of a subscribed subreddit is displayed.
+        <br />
+        <br />This is my Capstone project for the Udacity Android Developer Nanodegree (by Google).
+        <br />
+        <br />The advertisement is part of the project requirements (two google apis should be implemented).
+        <br />
+        <br />StavrosD (or sdim )</string>
     <string name="about">TextView</string>
     <string name="subscribed_reddits">Subscribed reddits</string>
     <string name="home_button">Button</string>
     <string name="andreddit">AndReddit</string>
+    <string name="share_reddit">Share reddit</string>
+    <string name="no_data_available_n_please_check_your_internet_connection">No data available!\n Please check your internet connection.</string>
+    <string name="user_icon">User icon</string>
+    <string name="comments">Comments</string>
+    <string name="make_a_comment">Make a comment</string>
+    <string name="comment">comment</string>
+    <string name="comment_with_comments">Comment with comments icon</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_login">Google login</string>
+    <string name="your_favorite_posts_are_stored_on_a_firebase_real_timee_database_please_login_to_use_the_favorites_feature">favorites_google_info</string>
+    <string name="favorites">Favorites</string>
+    <string name="catch_up">Catch up</string>
 </resources>

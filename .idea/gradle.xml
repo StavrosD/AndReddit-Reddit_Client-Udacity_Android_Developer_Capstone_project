@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/AndReddit" />
+            <option value="$PROJECT_DIR$/RedditAPIClient" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

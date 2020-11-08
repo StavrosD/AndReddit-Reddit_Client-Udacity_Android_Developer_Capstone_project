@@ -1,2 +1,3 @@
+include ':RedditAPIClient'
 include ':AndReddit'
 rootProject.name = "AndReddit"

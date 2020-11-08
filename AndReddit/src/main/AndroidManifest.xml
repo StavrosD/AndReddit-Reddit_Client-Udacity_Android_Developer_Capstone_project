@@ -9,7 +9,7 @@
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +23,7 @@
             android:theme="@style/Theme.AndReddit.NoActionBar">
 
         </activity>
-        <activity android:name=".login">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,6 +33,9 @@
                 <data android:host="example.com" android:scheme="http" android:path="/StavrosD" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/manifest_ads_unit_id"/>
     </application>
 
 </manifest>
