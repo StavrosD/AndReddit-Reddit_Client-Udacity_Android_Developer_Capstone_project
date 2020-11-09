@@ -1,7 +1,6 @@
 package gr.sdim.redditapiclient;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
@@ -21,18 +20,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import okio.BufferedSink;
 // the structure of the JSON objects is described here
 // https://github.com/reddit-archive/reddit/wiki/JSON
 
 public class RedditAPIClient {
 
-    private RedditAPIClientListener listener;
-
-    private String clientId;  // Open values/api_keys.xml and fill in your client ID
-
-    private static final String REDIRECT_URI ="http://example.com/StavrosD";
+    private static final String REDIRECT_URI = "http://example.com/StavrosD";
     private static final String STATE = "StavrosD";
     private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
     private static final String BASE_URL = "https://oauth.reddit.com";
@@ -41,20 +34,24 @@ public class RedditAPIClient {
     private static final String GET_NEXT_POST_URL = BASE_URL + "%snew.json?before=%s&limit=2&include_over_18=0";
     private static final String GET_LATEST_POST_URL = BASE_URL + "%snew/.json?include_over_18=0&limit=1&raw_json=1";
     private static final String POST_COMMENT_URL = BASE_URL + "/api/comment";
-    private static OkHttpClient client ;
+    private static OkHttpClient client;
     private static String accessToken;
     private static String refreshToken;
+    private RedditAPIClientListener listener;
+    private String clientId;  // Open values/api_keys.xml and fill in your client ID
     private Reddit[] subscribedReddits;
     private AtomicInteger requestedPostsCount;
 
-    public RedditAPIClient(@NotNull RedditAPIClientListener listener, @NotNull String accessToken){
+    public RedditAPIClient(@NotNull RedditAPIClientListener listener, @NotNull String accessToken) {
         this.listener = listener;
         this.accessToken = accessToken;
     }
 
     public RedditAPIClient(@NotNull String clientId, @NotNull RedditAPIClientListener listener) {
         super();
-        if (client == null) { client = new OkHttpClient(); }
+        if (client == null) {
+            client = new OkHttpClient();
+        }
         this.clientId = clientId;
         this.listener = listener;
     }
@@ -67,10 +64,10 @@ public class RedditAPIClient {
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "Basic " + encodedAuthString)
-                .addHeader("state",STATE)
-                .addHeader("scope","*") //"identity mysubreddits read submit")
-                .url(ACCESS_TOKEN_URL)
-                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),"grant_type=authorization_code&code=" + code +"&redirect_uri=" + REDIRECT_URI))
+                .addHeader("state", STATE)
+                .addHeader("scope", "*") //"identity mysubreddits read submit")
+                .url(ACCESS_TOKEN_URL + "?duration=permanent")
+                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), "grant_type=authorization_code&code=" + code + "&redirect_uri=" + REDIRECT_URI))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -91,13 +88,14 @@ public class RedditAPIClient {
 
                     listener.onSuccessfulAuthResponse(accessToken, refreshToken);
                 } catch (JSONException e) {
-                    listener.onFailure(request,e);
+                    listener.onFailure(request, e);
                 }
             }
         });
     }
+
     // if getPosts is true, getSubscribedReddits requests the each reddits' latest post
-    public void getSubscribedReddits(Boolean getPosts){
+    public void getSubscribedReddits(Boolean getPosts) {
 
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
@@ -112,7 +110,7 @@ public class RedditAPIClient {
             }
 
             @Override
-            public void onResponse(Response response)  {
+            public void onResponse(Response response) {
                 JSONArray registeredSubreddits;
                 try {
                     requestedPostsCount = new AtomicInteger();
@@ -120,39 +118,38 @@ public class RedditAPIClient {
                     registeredSubreddits = new JSONObject(body).getJSONObject("data").getJSONArray("children");
                     subscribedReddits = new Reddit[registeredSubreddits.length()];
                     int i;
-                    for (i=0;i<registeredSubreddits.length();i++){
+                    for (i = 0; i < registeredSubreddits.length(); i++) {
                         JSONObject data = registeredSubreddits.getJSONObject(i).getJSONObject("data");
                         subscribedReddits[i] = new Reddit(
                                 data.getString("display_name_prefixed") + "  ", // I could also modify the textview padding instead of adding some space here
                                 data.getString("title"),
-                                data.getString("public_description") ,
+                                data.getString("public_description"),
                                 null,
                                 null,
                                 data.getString("url"),
                                 data.getString("name")
                         );
                         requestedPostsCount.incrementAndGet();
-                        if (getPosts){
+                        if (getPosts) {
                             getLatestPost(subscribedReddits[i]);
-                            Log.d("getLatestPost",subscribedReddits[i].title);
                         }
                     }
                     listener.onGetSubscribedReddits(subscribedReddits);
                 } catch (JSONException e) {
-                    listener.onFailure(request,e);
-                } catch (IOException e){
-                    listener.onFailure(request,e);
+                    listener.onFailure(request, e);
+                } catch (IOException e) {
+                    listener.onFailure(request, e);
                 }
             }
         });
     }
 
 
-    public void getLatestPost(Reddit reddit){
+    public void getLatestPost(Reddit reddit) {
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "bearer " + accessToken)
-                .url(String.format(GET_LATEST_POST_URL,reddit.reddit_url))
+                .url(String.format(GET_LATEST_POST_URL, reddit.reddit_url))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -170,8 +167,8 @@ public class RedditAPIClient {
                         String result = response.body().string();
                         JSONObject postJSON = new JSONObject(result).getJSONObject("data").getJSONArray("children").getJSONObject(0).getJSONObject("data");
                         Post post = new Post(postJSON);
-                        for (Reddit reddit:subscribedReddits){
-                            if (reddit.name.equals(post.subreddit_id)){
+                        for (Reddit reddit : subscribedReddits) {
+                            if (reddit.name.equals(post.subreddit_id)) {
                                 reddit.current_post = post;
                                 reddit.nextPost = null;
                             }
@@ -185,7 +182,7 @@ public class RedditAPIClient {
         });
     }
 
-    public void getNextPost(Post post){ // fetch the next post
+    public void getNextPost(Post post) { // fetch the next post
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "bearer " + accessToken)
@@ -219,11 +216,11 @@ public class RedditAPIClient {
     }
 
 
-    public void getPostFromUrl(String url){ // fetch the next post
+    public void getPostFromUrl(String url) { // fetch the next post
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "bearer " + accessToken)
-                .url(url.replace("//www","//oauth") +".json?include_over_18=0")
+                .url(url.replace("//www", "//oauth") + ".json?include_over_18=0")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -252,7 +249,7 @@ public class RedditAPIClient {
         });
     }
 
-    public void getComments(Post post){
+    public void getComments(Post post) {
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "bearer " + accessToken)
@@ -285,7 +282,7 @@ public class RedditAPIClient {
         });
     }
 
-    public void getPostFromUrlComments(Post post){
+    public void getPostFromUrlComments(Post post) {
         Request request = new Request.Builder()
                 .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                 .addHeader("Authorization", "bearer " + accessToken)
@@ -318,8 +315,8 @@ public class RedditAPIClient {
         });
     }
 
-    public void postComment(String thing_name, String text){
-        try{
+    public void postComment(String thing_name, String text) {
+        try {
             Request request = new Request.Builder()
                     .addHeader("User-Agent", "androidAndredditClient/1 by StavrosD")
                     .addHeader("Authorization", "bearer " + accessToken)
@@ -349,7 +346,7 @@ public class RedditAPIClient {
                     }
                 }
             });
-        } catch (UnsupportedEncodingException ex){
+        } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
     }

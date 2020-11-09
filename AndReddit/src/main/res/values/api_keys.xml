@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manifest_ads_unit_id">insert your google ads unit id</string> <!-- replace with your ads unit ID -->
-    <string name="reddit_client_id">insert your reddit client id</string>
-    <string name="ad_unit_id">insert ad_unit_id</string>
+    <string name="manifest_ads_unit_id">ca-app-pub-9041018364059057~8357257196</string> <!-- replace with your ads unit ID -->
+    <string name="reddit_client_id">joypN5grPYIn5A</string>
+    <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

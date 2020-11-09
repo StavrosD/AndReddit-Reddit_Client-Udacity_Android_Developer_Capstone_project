@@ -20,24 +20,23 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     private ListComment[] comments;
     private Context context;
 
-    public CommentsAdapter(Context context)
-    {
+    public CommentsAdapter(Context context) {
         this.context = context;
     }
 
-    public CommentsAdapter(Context context, JSONArray comments){
+    public CommentsAdapter(Context context, JSONArray comments) {
         this.context = context;
         loadComments(comments);
     }
 
     public void loadComments(JSONArray comments) {
-        if (comments!= null) {
-            ArrayList<ListComment> mComments =  getComments(comments, 0);
+        if (comments != null) {
+            ArrayList<ListComment> mComments = getComments(comments, 0);
             this.comments = mComments.toArray(new ListComment[mComments.size()]);
         }
     }
 
-    public void clearComments(){
+    public void clearComments() {
         comments = new ListComment[]{};
     }
 
@@ -63,7 +62,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentViewHolder> {
             }
 
 
-        return list;
+            return list;
         }
         return null;
     }

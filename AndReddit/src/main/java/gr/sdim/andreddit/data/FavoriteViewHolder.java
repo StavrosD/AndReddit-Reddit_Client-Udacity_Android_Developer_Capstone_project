@@ -12,6 +12,7 @@ import gr.sdim.andreddit.databinding.FavoriteListItemViewBinding;
 public class FavoriteViewHolder extends RecyclerView.ViewHolder {
     public MaterialTextView titleTextView;
     public ImageView bookmarkImage;
+
     public FavoriteViewHolder(View view) {
         super(view);
         FavoriteListItemViewBinding binding = FavoriteListItemViewBinding.bind(view);

@@ -4,12 +4,12 @@ public class Reddit {
     public String prefix;
     public String title;
     public String details;
-    public Post   current_post;
-    public Post   nextPost;
+    public Post current_post;
+    public Post nextPost;
     public String reddit_url;
     public String name;
 
-    public Reddit(String prefix, String title, String details, Post current_post, Post nextPost, String reddit_url, String name){
+    public Reddit(String prefix, String title, String details, Post current_post, Post nextPost, String reddit_url, String name) {
         this.prefix = prefix;
         this.title = title;
         this.details = details;

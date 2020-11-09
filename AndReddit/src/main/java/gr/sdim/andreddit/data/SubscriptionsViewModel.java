@@ -28,57 +28,60 @@ public class SubscriptionsViewModel extends ViewModel {
 
     public void setData(Reddit[] data) {
         subscribedReddits.postValue(Arrays.asList(data));
-        currentRedditIndex=0;
+        currentRedditIndex = 0;
     }
 
     public LiveData<List<Reddit>> getSubscribedReddits() {
         return subscribedReddits;
     }
 
-    public Integer getCurrentIndex() { return currentRedditIndex; }
+    public Integer getCurrentIndex() {
+        return currentRedditIndex;
+    }
 
-    public void setCurrentIndex(Integer index) {currentRedditIndex = index;}
+    public void setCurrentIndex(Integer index) {
+        currentRedditIndex = index;
+    }
 
-    public Boolean hasPost(){
+    public Boolean hasPost() {
         if (subscribedReddits.getValue() == null) return false;
-        if (subscribedReddits.getValue().size() > currentRedditIndex -1) return false;
-        if (subscribedReddits.getValue().get(currentRedditIndex).current_post == null) return  false;
+        if (subscribedReddits.getValue().size() > currentRedditIndex - 1) return false;
+        if (subscribedReddits.getValue().get(currentRedditIndex).current_post == null) return false;
         return true;
     }
 
-    private void increaseIndex(){
+    private void increaseIndex() {
         Integer redditCount = subscribedReddits.getValue().size();
-        if (currentRedditIndex < redditCount - 1){
+        if (currentRedditIndex < redditCount - 1) {
             currentRedditIndex++;
         } else {
-            currentRedditIndex=0;
+            currentRedditIndex = 0;
         }
     }
 
-    public Reddit getNextReddit(){
+    public Reddit getNextReddit() {
         increaseIndex();
         return getCurrentReddit();
     }
 
-    public Reddit getCurrentReddit(){
+    public Reddit getCurrentReddit() {
         if (subscribedReddits.getValue().size() == 0) return null;
         return subscribedReddits.getValue().get(currentRedditIndex);
     }
 
-    public Post getCurrentPost(){
+    public Post getCurrentPost() {
         if (subscribedReddits.getValue().size() == 0) return null;
-        return subscribedReddits.getValue().get(currentRedditIndex).current_post; }
+        return subscribedReddits.getValue().get(currentRedditIndex).current_post;
+    }
 
     public Post moveToNextReditPost() {
         increaseIndex();
         return getCurrentPost();
     }
-    
-    public void addPost(Post post){
-        Log.i("POSTRECEIVED",post.title);
 
-        for (Reddit reddit:subscribedReddits.getValue()) {
-            if (post.subreddit_id.equals(reddit.name)){
+    public void addPost(Post post) {
+        for (Reddit reddit : subscribedReddits.getValue()) {
+            if (post.subreddit_id.equals(reddit.name)) {
                 if (reddit.current_post == null) { // this is the first received post for this reddit
                     reddit.current_post = post;
                 } else if (reddit.nextPost == null) { // this is the next received post for this reddit. It is prefetched for better UI experiance
@@ -90,8 +93,8 @@ public class SubscriptionsViewModel extends ViewModel {
             }
         }
     }
-    
-    public void addComments(JSONArray comments){
+
+    public void addComments(JSONArray comments) {
         if (comments != null) {
             if (comments.length() > 0) {
                 try {

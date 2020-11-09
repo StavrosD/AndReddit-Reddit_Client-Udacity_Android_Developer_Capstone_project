@@ -2,7 +2,6 @@ package gr.sdim.andreddit;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,8 +16,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,35 +26,33 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 import gr.sdim.andreddit.data.Favorite;
-import gr.sdim.andreddit.databinding.ActivityMainBinding;
 import gr.sdim.andreddit.data.SubscriptionsViewModel;
+import gr.sdim.andreddit.databinding.ActivityMainBinding;
 import gr.sdim.andreddit.ui.subreddit.SubredditFragment;
 import gr.sdim.redditapiclient.Post;
 import gr.sdim.redditapiclient.Reddit;
 import gr.sdim.redditapiclient.RedditAPIClient;
 import gr.sdim.redditapiclient.RedditAPIClientListener;
 
-import static com.google.firebase.database.FirebaseDatabase.*;
+import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 public class MainActivity extends AppCompatActivity implements RedditAPIClientListener {
 
     public static final String EXTRA_ACCESS_TOKEN = "access_token";
     public static final String EXTRA_REFRESH_TOKEN = "refresh_token";
-    private Menu menu;
     public String accessToken;
     public String refreshToken;
-
-    private SubscriptionsViewModel subscriptionsViewModel;
-    private AppBarConfiguration mAppBarConfiguration;
     public NavController navController;
-    private ActivityMainBinding mainBinding;
     public RedditAPIClient redditAPIClient;
     // true: display post from URL (favorites)
     public Boolean getPostFromUrl;
     public Post postFromUrl;
-
     FirebaseDatabase database = getInstance();
     DatabaseReference myRef = database.getReference("message");
+    private Menu menu;
+    private SubscriptionsViewModel subscriptionsViewModel;
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActivityMainBinding mainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +60,15 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         subscriptionsViewModel = new ViewModelProvider(this).get(SubscriptionsViewModel.class);
 
-        setContentView( mainBinding.getRoot());
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        setContentView(mainBinding.getRoot());
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = mainBinding.drawerLayout;
         NavigationView navigationView = mainBinding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_subscribed, R.id.nav_subreddit,  R.id.nav_favorites,R.id.nav_about)
+                R.id.nav_subscribed, R.id.nav_subreddit, R.id.nav_favorites, R.id.nav_about)
                 .setOpenableLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -95,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
         }
     }
 
-    public void showRedditAtIndex(Integer index){
+    public void showRedditAtIndex(Integer index) {
         runOnUiThread(() -> navController.navigate(R.id.nav_subreddit));
         subscriptionsViewModel.setCurrentIndex(index);
     }
@@ -118,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        outState.putString(EXTRA_ACCESS_TOKEN,accessToken);
-        outState.putString(EXTRA_REFRESH_TOKEN,refreshToken);
+        outState.putString(EXTRA_ACCESS_TOKEN, accessToken);
+        outState.putString(EXTRA_REFRESH_TOKEN, refreshToken);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -142,20 +137,20 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
 
     @Override
     public void onFailure(@NotNull Exception e) {
-        Log.e(TAG,e.getMessage());
+        Snackbar.make(mainBinding.navView, "Error: Could not retrieve data! Please check your internet connection.", BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Post post;
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_add_favorite:
                 post = subscriptionsViewModel.getCurrentPost();
                 Favorite favorite = new Favorite(post.title, post.url);
                 FirebaseDatabase.getInstance().getReference().child(getString(R.string.favorites))
                         .push().setValue(favorite)
-                        .addOnSuccessListener(aVoid -> Snackbar.make(mainBinding.navView,"Favorite added!", BaseTransientBottomBar.LENGTH_LONG).show())
-                        .addOnCanceledListener(() -> Snackbar.make(mainBinding.navView,"Error: Could not add favorite!", BaseTransientBottomBar.LENGTH_LONG).show());
+                        .addOnSuccessListener(aVoid -> Snackbar.make(mainBinding.navView, "Favorite added!", BaseTransientBottomBar.LENGTH_LONG).show())
+                        .addOnCanceledListener(() -> Snackbar.make(mainBinding.navView, "Error: Could not add favorite!", BaseTransientBottomBar.LENGTH_LONG).show());
 
             case R.id.action_catch_up:
                 redditAPIClient.getSubscribedReddits(true);
@@ -163,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
 
             case R.id.action_share:
                 post = subscriptionsViewModel.getCurrentReddit().current_post;
-                if (post != null){
+                if (post != null) {
                     ShareCompat.IntentBuilder.from(this)
                             .setType("text/plain")
                             .setChooserTitle("Share reddit: " + post.title)
@@ -176,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
         }
     }
 
-    public void showPostMenu(){
+    public void showPostMenu() {
         menu.findItem(R.id.action_add_favorite).setVisible(true);
         menu.findItem(R.id.action_share).setVisible(true);
     }
@@ -189,20 +184,20 @@ public class MainActivity extends AppCompatActivity implements RedditAPIClientLi
     @Override
     public void onGetPostFromUrlResponse(Post post) {
         redditAPIClient.getPostFromUrlComments(post);
-        SubredditFragment fragment = (SubredditFragment)getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
+        SubredditFragment fragment = (SubredditFragment) getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
         runOnUiThread(() -> fragment.setPost(post));
     }
 
     @Override
     public void onGetPostFromUrlCommentsResponse(JSONArray comments) {
-        SubredditFragment fragment = (SubredditFragment)getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
+        SubredditFragment fragment = (SubredditFragment) getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
         runOnUiThread(() -> fragment.setComments(comments));
     }
 
     @Override
     public void onCommentPosted() {
-        Snackbar.make(mainBinding.navView,"Commend added!", BaseTransientBottomBar.LENGTH_LONG).show();
-        SubredditFragment fragment = (SubredditFragment)getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
+        Snackbar.make(mainBinding.navView, "Commend added!", BaseTransientBottomBar.LENGTH_LONG).show();
+        SubredditFragment fragment = (SubredditFragment) getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getPrimaryNavigationFragment();
         redditAPIClient.getPostFromUrlComments(fragment.currentPost);
     }
 }

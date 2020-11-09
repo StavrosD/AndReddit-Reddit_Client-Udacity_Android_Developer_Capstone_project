@@ -15,12 +15,13 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     public ImageView arrowImage;
     public ImageView commentImage;
     public Integer level = 0;
+
     public CommentViewHolder(View view) {
         super(view);
         CommentListItemViewBinding binding = CommentListItemViewBinding.bind(view);
         arrowImage = binding.commentArrow;
         commentImage = binding.commentImage;
         commentTextView = binding.commentText;
-        binding.getRoot().setPadding(8+level*24,8,8,8);
+        binding.getRoot().setPadding(8 + level * 24, 8, 8, 8);
     }
 }

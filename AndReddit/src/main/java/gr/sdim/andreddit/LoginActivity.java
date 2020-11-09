@@ -29,22 +29,18 @@ import gr.sdim.redditapiclient.RedditAPIClientListener;
 // https://progur.com/2016/10/how-to-use-reddit-oauth2-in-android-apps.html
 
 public class LoginActivity extends AppCompatActivity implements RedditAPIClientListener {
-    private static final String TAG = "login_activity" ;
-    ActivityLoginBinding binding;
-    private InterstitialAd mInterstitialAd;
-
+    private static final String TAG = "login_activity";
     private static final String AUTH_URL =
             "https://www.reddit.com/api/v1/authorize.compact?client_id=%s" +
                     "&response_type=code&state=%s&redirect_uri=%s&" +
                     "duration=temporary&scope=identity mysubreddits read";
-
-
-    private static final String REDIRECT_URI ="http://example.com/StavrosD";
-
+    private static final String REDIRECT_URI = "http://example.com/StavrosD";
     private static final String STATE = "StavrosD";
-
     private static final String ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
+    ActivityLoginBinding binding;
+    private InterstitialAd mInterstitialAd;
     private RedditAPIClient redditAPIClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,28 +57,29 @@ public class LoginActivity extends AppCompatActivity implements RedditAPIClientL
                 redirectToRedditLogin();
             }
 
-        });        setContentView(binding.getRoot());
+        });
+        setContentView(binding.getRoot());
 
-        redditAPIClient = new RedditAPIClient(getString(R.string.reddit_client_id),this);
+        redditAPIClient = new RedditAPIClient(getString(R.string.reddit_client_id), this);
 
     }
 
     public void onLoginClick(View view) {
-        if (mInterstitialAd.isLoaded()){
+        if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {  // if the ad is not loaded for some reason, proceed to login
             redirectToRedditLogin();
         }
     }
 
-    private void redirectToRedditLogin(){
+    private void redirectToRedditLogin() {
         String url = String.format(AUTH_URL, getString(R.string.reddit_client_id), STATE, REDIRECT_URI);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         showProgressBar();
         startActivity(intent);
     }
 
-    private void showProgressBar(){
+    private void showProgressBar() {
         // I use this on an async function, however it should run on the main UI thread.
         runOnUiThread(() -> {
             binding.buttonLogin.setVisibility(View.GONE);
@@ -92,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements RedditAPIClientL
         });
     }
 
-    private void hideProgressBar(){
+    private void hideProgressBar() {
         // I use this on an async function, however it should run on the main UI thread.
         runOnUiThread(() -> {
             binding.buttonLogin.setVisibility(View.VISIBLE);
@@ -105,14 +102,13 @@ public class LoginActivity extends AppCompatActivity implements RedditAPIClientL
     @Override
     protected void onResume() {
         super.onResume();
-        if(getIntent()!=null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
             Uri uri = getIntent().getData();
-            if(uri.getQueryParameter("error") != null) {
+            if (uri.getQueryParameter("error") != null) {
                 String error = uri.getQueryParameter("error");
-                Log.e(TAG, "An error has occurred : " + error);
             } else {
                 String state = uri.getQueryParameter("state");
-                if(state.equals(STATE)) {
+                if (state.equals(STATE)) {
                     String code = uri.getQueryParameter("code");
                     showProgressBar();
                     redditAPIClient.getAccessToken(code);
@@ -134,13 +130,11 @@ public class LoginActivity extends AppCompatActivity implements RedditAPIClientL
 
     @Override
     public void onFailure(Request request, IOException e) {
-        Log.e(TAG, "ERROR: " + e);
         hideProgressBar();
     }
 
     @Override
     public void onFailure(Request request, JSONException e) {
-        Log.e(TAG, "ERROR: " + e);
         hideProgressBar();
     }
 
